@@ -3,6 +3,8 @@
 #include "InputMappingContext.h"
 #include "AAlphaBaseCharacter.generated.h"
 
+enum class EPlayerMovementState { Walking, Running, Crouching };
+
 UCLASS(Config=Game)
 class AAlphaBaseCharacter : public ACharacter
 {
@@ -69,6 +71,17 @@ public:
 	 * @param NewBaseMovementSpeed New movement speed (unit/s)
 	 */
 	void SetBaseMovementSpeed(float NewBaseMovementSpeed) { BaseMovementSpeed = NewBaseMovementSpeed; }
+
+	/**
+	 * Returns the current player movement state
+	 */
+	EPlayerMovementState GetMovementState() { return CurrentMoveState; }
+
+	/**
+	 * Sets the characters movement state
+	 * @param NewMovementState New player movement state
+	 */
+	void SetMovementState(EPlayerMovementState NewMovementState) { CurrentMoveState = NewMovementState; }
 	
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
@@ -91,4 +104,5 @@ private:
 	float BaseHealth;
 	float BaseHealthRegeneration;
 	float BaseMovementSpeed;
+	EPlayerMovementState CurrentMoveState;
 };

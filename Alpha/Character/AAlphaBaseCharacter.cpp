@@ -1,5 +1,4 @@
 #include "AAlphaBaseCharacter.h"
-#include "AAlphaBaseCharacter.h"
 #include "EnhancedInput/Public/EnhancedInputSubsystems.h"
 #include "EnhancedInput/Public/EnhancedInputComponent.h"
 #include "UAlphaInputConfig.h"
@@ -12,24 +11,22 @@ AAlphaBaseCharacter::AAlphaBaseCharacter()
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
-	GetCharacterMovement()->JumpZVelocity = 700.0f;
-	GetCharacterMovement()->AirControl = 0.35f;
-	GetCharacterMovement()->MaxWalkSpeed = 500.0f;
-	GetCharacterMovement()->MinAnalogWalkSpeed = 20.0f;
-	GetCharacterMovement()->BrakingDecelerationWalking = 2000.0f;
 	
 	SetReplicates(true);
 
+	bReplicates = true;
 	bUseControllerRotationPitch = true;
 	bUseControllerRotationYaw = true;
 	bUseControllerRotationRoll = true;
-	bReplicates = true;
 	PrimaryActorTick.bCanEverTick = true;
 }
 
 void AAlphaBaseCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+
+	// print debug to screen
+	GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Cyan, FString::Printf(TEXT("vel: %f"), GetVelocity().Size()));
 }
 
 void AAlphaBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -56,16 +53,17 @@ void AAlphaBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		{
 			PlayerEnhancedInputComponent->BindAction(InputActions->InputLook, ETriggerEvent::Triggered, this, &AAlphaBaseCharacter::Look);
 		}
+
+		if (InputActions->InputJump)
+		{
+			PlayerEnhancedInputComponent->BindAction(InputActions->InputJump, ETriggerEvent::Triggered, this, &AAlphaBaseCharacter::Jump);
+		}
 	}
 }
 
 void AAlphaBaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// debug out
-	check(GEngine != nullptr);
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("AAlphaBaseCharacter::BeginPlay()"));
 }
 
 void AAlphaBaseCharacter::Move(const FInputActionValue& Value)
