@@ -1,7 +1,16 @@
 #pragma once
+#include "Alpha/Character/AAlphaBaseCharacter.h"
+#include "AAlphaGenericCharacter.generated.h"
 
-class AAlphaGenericCharacter
+UCLASS(Config=Game)
+class AAlphaGenericCharacter : public AAlphaBaseCharacter
 {
-public:
+	GENERATED_BODY()
 	
+public:
+	AAlphaGenericCharacter();
+
+protected:
+	virtual void SpecialA1(const FInputActionValue& Value) override;
+	virtual void SpecialA2(const FInputActionValue& Value) override;
 };

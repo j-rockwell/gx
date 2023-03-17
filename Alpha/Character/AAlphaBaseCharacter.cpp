@@ -11,6 +11,9 @@ AAlphaBaseCharacter::AAlphaBaseCharacter()
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
+
+	// manually set walk speed
+	GetCharacterMovement()->MaxWalkSpeed = GetBaseMovementSpeed();
 	
 	SetReplicates(true);
 
@@ -57,6 +60,16 @@ void AAlphaBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		if (InputActions->InputJump)
 		{
 			PlayerEnhancedInputComponent->BindAction(InputActions->InputJump, ETriggerEvent::Triggered, this, &AAlphaBaseCharacter::Jump);
+		}
+
+		if (InputActions->InputSpecial1)
+		{
+			PlayerEnhancedInputComponent->BindAction(InputActions->InputSpecial1, ETriggerEvent::Triggered, this, &AAlphaBaseCharacter::SpecialA1);
+		}
+
+		if (InputActions->InputSpecial2)
+		{
+			PlayerEnhancedInputComponent->BindAction(InputActions->InputSpecial2, ETriggerEvent::Triggered, this, &AAlphaBaseCharacter::SpecialA2);
 		}
 	}
 }
@@ -114,7 +127,39 @@ void AAlphaBaseCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+// TODO: Make special ability calls a single universal func call
+void AAlphaBaseCharacter::SpecialA1(const FInputActionValue& Value)
+{
+	if (Controller == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Controller nullptr"))
+		return;
+	}
 
+	GEngine->AddOnScreenDebugMessage(0, 5.0f, FColor::Green, FString::Printf(TEXT("special 1 triggered")));
+	UE_LOG(LogTemp, Display, TEXT("AAlphaBaseCharacter::SpecialA1::init()"));
 
+	if (bool InputValue = Value.Get<bool>())
+	{
+		// TODO: Trigger special ability 1
+		GEngine->AddOnScreenDebugMessage(1, 5.0f, FColor::Green, FString::Printf(TEXT("special 1 true")));
+	}
+}
 
+void AAlphaBaseCharacter::SpecialA2(const FInputActionValue& Value)
+{
+	if (Controller == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Controller nullptr"))
+		return;
+	}
+	
+	GEngine->AddOnScreenDebugMessage(2, 5.0f, FColor::Green, FString::Printf(TEXT("special 2 triggered")));
+	UE_LOG(LogTemp, Display, TEXT("AAlphaBaseCharacter::SpecialA2::init()"));
 
+	if (bool InputValue = Value.Get<bool>())
+	{
+		// TODO: Trigger special ability 2
+		GEngine->AddOnScreenDebugMessage(3, 5.0f, FColor::Green, FString::Printf(TEXT("special 2 true")));
+	}
+}
