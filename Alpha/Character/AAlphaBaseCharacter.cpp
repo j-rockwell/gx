@@ -22,6 +22,8 @@ AAlphaBaseCharacter::AAlphaBaseCharacter()
 	bUseControllerRotationYaw = true;
 	bUseControllerRotationRoll = true;
 	PrimaryActorTick.bCanEverTick = true;
+
+	MovementPtr = Cast<UAlphaMovementConfig>(ACharacter::GetMovementComponent());
 }
 
 void AAlphaBaseCharacter::Tick(float DeltaSeconds)
@@ -77,6 +79,16 @@ void AAlphaBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 void AAlphaBaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+void AAlphaBaseCharacter::Jump()
+{
+	if (GetCharacterMovement()->IsFalling())
+	{
+		bDeferJumpStop = true;
+	}
+
+	Super::Jump();
 }
 
 void AAlphaBaseCharacter::Move(const FInputActionValue& Value)

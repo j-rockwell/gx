@@ -1,6 +1,7 @@
 #pragma once
 #include "GameFramework/Character.h"
 #include "InputMappingContext.h"
+#include "UAlphaMovementConfig.h"
 #include "AAlphaBaseCharacter.generated.h"
 
 UCLASS(Config=Game)
@@ -13,6 +14,11 @@ class AAlphaBaseCharacter : public ACharacter
 	
 public:
 	AAlphaBaseCharacter();
+
+	UFUNCTION(Category = "Getters", BlueprintPure) FORCEINLINE UAlphaMovementConfig* GetMovementPtr() const
+	{
+		return MovementPtr;
+	}
 
 	/**
 	 * @brief Returns the name of the character
@@ -69,6 +75,24 @@ public:
 	 * @param NewBaseMovementSpeed New movement speed (unit/s)
 	 */
 	void SetBaseMovementSpeed(float NewBaseMovementSpeed) { BaseMovementSpeed = NewBaseMovementSpeed; }
+
+	/**
+	 * Returns true if the player is attempting to walk in a new direction
+	 */
+	UFUNCTION()
+	bool DoesWantToWalk() const
+	{
+		 return bWantsToWalk;
+	}
+
+	/**
+	 * Returns true if the player is walking
+	 */
+	UFUNCTION()
+	bool IsWalking() const
+	{
+		 return bIsWalking;
+	}
 	
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
@@ -84,14 +108,20 @@ protected:
 
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
+	virtual void Jump() override;
 	virtual void SpecialA1(const FInputActionValue& Value);
 	virtual void SpecialA2(const FInputActionValue& Value);
 	// void UltimateA(const FInputActionValue& Value);
 
 private:
+	UAlphaMovementConfig* MovementPtr;
+	
 	FString Name;
 	float BaseEyeHeight;
 	float BaseHealth;
 	float BaseHealthRegeneration;
 	float BaseMovementSpeed;
+	bool bWantsToWalk;
+	bool bIsWalking;
+	bool bDeferJumpStop;
 };
