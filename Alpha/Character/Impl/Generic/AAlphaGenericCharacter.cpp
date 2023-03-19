@@ -33,7 +33,7 @@ AAlphaGenericCharacter::AAlphaGenericCharacter()
 void AAlphaGenericCharacter::SpecialA1(const FInputActionValue& Value)
 {
 	Super::SpecialA1(Value);
-	GEngine->AddOnScreenDebugMessage(4, 5.0f, FColor::Orange, FString::Printf(TEXT("special 1ß true (from child)")));
+	GEngine->AddOnScreenDebugMessage(4, 5.0f, FColor::Orange, FString::Printf(TEXT("special 1 true (from child)")));
 }
 
 void AAlphaGenericCharacter::SpecialA2(const FInputActionValue& Value)
