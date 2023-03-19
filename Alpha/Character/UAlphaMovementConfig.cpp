@@ -826,14 +826,10 @@ bool UAlphaMovementConfig::CanAttemptJump() const
 
 float UAlphaMovementConfig::GetMaxSpeed() const
 {
-	float Speed;
-
 	if (AlphaCharacter->IsWalking() || AlphaCharacter->DoesWantToWalk())
-		Speed = WalkMovementSpeed;
-	else
-		Speed = BaseMovementSpeed;
+		return WalkMovementSpeed;
 
-	return Speed;
+	return BaseMovementSpeed;
 }
 
 
