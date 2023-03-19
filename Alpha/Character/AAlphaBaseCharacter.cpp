@@ -30,6 +30,12 @@ void AAlphaBaseCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
+	if (bDeferJumpStop)
+	{
+		bDeferJumpStop = false;
+		Super::StopJumping();
+	}
+
 	// print debug to screen
 	GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Cyan, FString::Printf(TEXT("vel: %f"), GetVelocity().Size()));
 }
@@ -79,6 +85,8 @@ void AAlphaBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 void AAlphaBaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	MaxJumpTime = -4.0f * GetCharacterMovement()->JumpZVelocity / (3.0f * GetCharacterMovement()->GetGravityZ());
 }
 
 void AAlphaBaseCharacter::Jump()
@@ -102,14 +110,14 @@ void AAlphaBaseCharacter::Move(const FInputActionValue& Value)
 	const FRotator MoveRot(0, Controller->GetControlRotation().Yaw, 0);
 
 	// forward/back
-	if (MoveValue.Y != 0.0f)
+	if (!FMath::IsNearlyZero(MoveValue.Y))
 	{
 		const FVector Direction = MoveRot.RotateVector(FVector::ForwardVector);
 		AddMovementInput(Direction, MoveValue.Y);
 	}
 
 	// left/right
-	if (MoveValue.X != 0.0f)
+	if (!FMath::IsNearlyZero(MoveValue.X))
 	{
 		const FVector Direction = MoveRot.RotateVector(FVector::RightVector);
 		AddMovementInput(Direction, MoveValue.X);

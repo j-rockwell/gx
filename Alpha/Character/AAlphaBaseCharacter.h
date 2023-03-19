@@ -121,6 +121,7 @@ private:
 	float BaseHealth;
 	float BaseHealthRegeneration;
 	float BaseMovementSpeed;
+	float MaxJumpTime;
 	bool bWantsToWalk;
 	bool bIsWalking;
 	bool bDeferJumpStop;
